@@ -18,10 +18,12 @@ function generate_random_strings(){
 	# 计数器
 	COUNT=0
 	# 生成密码个数
-	NUMBER_OF_PASSWORDS=10
+	# NUMBER_OF_PASSWORDS=10
+	NUMBER_OF_PASSWORDS=$1
 	while [[ true ]]; do
 		# 生成密码长度
-		PASSWORD_LENGTH=16
+		# PASSWORD_LENGTH=16
+		PASSWORD_LENGTH=$2
 		PASSWORD=""
 		for (( j = 0; j < ${PASSWORD_LENGTH}; j++ )); do
 			# 随机下标
@@ -47,6 +49,9 @@ function generate_random_strings(){
 	done
 }
 
-generate_random_strings
+# generate_random_strings
 
-# 脚本不一定成功，不喜勿喷！
+# 生成？个密码，长度为？
+generate_random_strings $1 $2
+
+# 脚本运行不一定能成功，不喜勿喷！
