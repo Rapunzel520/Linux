@@ -48,3 +48,5 @@ function generate_random_strings(){
 }
 
 generate_random_strings
+
+# 脚本不一定成功，不喜勿喷！
