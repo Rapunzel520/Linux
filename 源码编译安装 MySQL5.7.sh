@@ -8,11 +8,13 @@ function install_mysql57(){
 	yum install -y epel-release
 	# 安装依赖包
 	yum install -y  gcc gcc-c++ cmake ncurses ncurses-devel bison
-	# axel：多线程下载工具，下载文件时可以替代curl、wget。
+	# axel：多线程下载工具，下载文件时可以替代curl、wget。（人家分享的命令，试试看好不好用）
 	yum install -y axel
 	# axel -n 20 下载链接
 	cd /usr/local/src
-	axel -n 20 https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
+	# 好像有个bug，如果文件遇到特许情况没有下载完成，文件名还是存在的，所以它不会继续下载
+	# wget -c 应该可以解决（-c 断点续传）
+	[ ! -f mysql-boost-5.7.25.tar.gz ] && axel -n 20 https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
 	# 添加用户
 	useradd -s /sbin/nologin mysql
 	# 建立所需目录并更改所有者为mysql
