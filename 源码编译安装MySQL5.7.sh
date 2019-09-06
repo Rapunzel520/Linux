@@ -28,7 +28,7 @@ function install_mysql57(){
 	cd /usr/local/mysql/mysql-5.7.25/
 	# cmake安装MySQL默认安装在/usr/local/mysql，如果要指定目录需要加参数：-DCMAKE_INSTALL_PREFIX=
 	cmake -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_BOOST=boost
-	make && make install
+	make -j 2 && make install
 # 配置文件
 cat > /etc/my.cnf << \EOF
 [client]
@@ -113,7 +113,7 @@ EOF
 
 	# 修改密码
 	mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '123';"
-	echo -e "\033[31mMySQL的初始密码为：123\033[0m"	
+	echo -e "\033[31mMySQL的初始密码为：123\033[0m"
 
 	# 授权远程登录
 	# GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123' WITH GRANT OPTION;
