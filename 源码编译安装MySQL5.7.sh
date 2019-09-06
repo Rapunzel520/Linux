@@ -26,6 +26,7 @@ function install_mysql57(){
 	tar -zxvf mysql-boost-5.7.25.tar.gz -C /usr/local/mysql/
 	# 编译安装
 	cd /usr/local/mysql/mysql-5.7.25/
+	# cmake安装MySQL默认安装在/usr/local/mysql，如果要指定目录需要加参数：-DCMAKE_INSTALL_PREFIX=
 	cmake -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_BOOST=boost
 	make && make install
 # 配置文件

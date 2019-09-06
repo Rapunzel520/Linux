@@ -51,13 +51,14 @@ function install_mysql57(){
 	# 添加用户
 	[ ! $(grep mysql /etc/passwd) ] && useradd -s /sbin/nologin mysql
 	# 建立所需目录并更改所有者为mysql
-	mkdir -p /data/mysql/data
+	[ ! -d /data/mysql/data ] && mkdir -p /data/mysql/data
 	chown -R mysql:mysql /data/mysql
 	# 将下载好的mysql 解压到/usr/local/mysql 目录下
-	mkdir -p /usr/local/mysql/
+	[ ! -d /usr/local/mysql/ ] && mkdir -p /usr/local/mysql/
 	tar -zxvf mysql-boost-5.7.25.tar.gz -C /usr/local/mysql/
 	# 编译安装
 	cd /usr/local/mysql/mysql-5.7.25/
+	# cmake安装MySQL默认安装在/usr/local/mysql，如果要指定目录需要加参数：-DCMAKE_INSTALL_PREFIX=
 	cmake -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_BOOST=boost
 	make && make install
 # 配置文件
