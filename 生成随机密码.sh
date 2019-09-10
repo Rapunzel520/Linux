@@ -1,6 +1,5 @@
 #!/bin/bash
 # 2019-8-13
-# 111
 # 随机生成?位字符
 function generate_random_strings(){
 	# 数字0-9
