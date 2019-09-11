@@ -17,7 +17,7 @@ function install_mysql57(){
 	# wget -c https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
 	[ ! -f mysql-boost-5.7.25.tar.gz ] && axel -n 20 https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
 	# 添加用户
-	useradd -s /sbin/nologin mysql
+	[ ! $(grep mysql /etc/passwd) ] && useradd -s /sbin/nologin mysql
 	# 建立所需目录并更改所有者为mysql
 	mkdir -p /data/mysql/data
 	chown -R mysql:mysql /data/mysql
