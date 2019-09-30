@@ -14,6 +14,7 @@ function eosio_install(){
 	cd /data/
 	# 参数 --recursive 表示下载项目需要的所有子模块
 	git clone https://github.com/EOS-Mainnet/eos.git --recursive
+	[ $? -ne 0 ] && exit 1
 	cd /data/eos/
 	# 切换到最新版本
 	git checkout $(git tag | grep mainnet | tail -n 1)
@@ -21,12 +22,12 @@ function eosio_install(){
 	# 更新子模块
 	git submodule update --init --recursive
 	# 修改MongoDB的下载地址
-	sed -i 's#https://fastdl.mongodb.org#http://downloads.mongodb.org#' scripts/*.sh
+	sed -i 's#https://fastdl.mongodb.org#http://downloads.mongodb.org#' /data/eos/scripts/*.sh
 	echo -e "\033[31m准备运行编译，要几个小时才完成\033[0m"
 	echo -e "\033[31m需要输入“1”去确认下载依赖包，之后就是等待编译完成\033[0m"
 	sleep 5
 	# 运行编译，要几个小时才完成
-	./eosio_build.sh -s "EOS"	
+	/data/eos/eosio_build.sh -s "EOS"
 
 	# 需要输入“1”去确认下载依赖包
 	
@@ -46,7 +47,7 @@ function eosio_install(){
 	# EOSIO wiki: https://github.com/EOSIO/eos/wiki	
 
 	# 编译完成后，安装
-	./eosio_install.sh
+	/data/eos/eosio_install.sh
 	# 出现信息，成功
 	# Installing EOSIO Binary Symlinks
 	#  _______  _______  _______ _________ _______
@@ -68,21 +69,21 @@ function eosio_install(){
 	[ ! -d /data/EOSmainNet ] && mkdir -p /data/EOSmainNet
 	cd /data/EOSmainNet/
 	git clone https://github.com/CryptoLions/EOS-MainNet.git ./
-	chmod a+x ./*.sh   
-	chmod a+x ./Wallet/*.sh 
+	chmod a+x /data/EOSmainNet/*.sh
+	chmod a+x /data/EOSmainNet/Wallet/*.sh
 	# 修改区块存储限制
 	# 备份初始文件
-	cp config.ini /tmp/config.ini_initial
-	sed -i 's/chain-state-db-size-mb = 65536/chain-state-db-size-mb = 102400/' config.ini
+	cp /data/EOSmainNet/config.ini /tmp/config.ini_initial
+	sed -i 's/chain-state-db-size-mb = 65536/chain-state-db-size-mb = 102400/' /data/EOSmainNet/config.ini
 	# 更改nodeos编译路径（cleos.sh，start.sh，Wallet/start_wallet.sh）
-	sed -i 's#/home/eos-sources/eos#/data/eos#' *.sh
-	sed -i 's#/home/eos-sources/eos#/data/eos#' Wallet/*.sh
+	sed -i 's#/home/eos-sources/eos#/data/eos#' /data/EOSmainNet/*.sh
+	sed -i 's#/home/eos-sources/eos#/data/eos#' /data/EOSmainNet/Wallet/*.sh
 	# 修改脚本路径
-	sed -i 's/opt/data/g' *.sh
-	sed -i 's/opt/data/g' Wallet/*.sh
+	sed -i 's/opt/data/g' /data/EOSmainNet/*.sh
+	sed -i 's/opt/data/g' /data/EOSmainNet/Wallet/*.sh
 
 	# 提前解决报错
-	sed -i "s/http-threads.*/#&/" config.ini
+	sed -i "s/http-threads.*/#&/" /data/EOSmainNet/config.ini
 	# 首次启动,清除现有区块并加入主网
 	sudo /data/EOSmainNet/start.sh --genesis-json /data/EOSmainNet/genesis.json --delete-all-blocks
 
