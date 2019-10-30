@@ -43,14 +43,6 @@ EOF
 	source /etc/profile
 	# 查看java版本
 	java -version
-
-	if [[ $? -eq 0 ]]; then
-		echo -e "\033[31m还需要再手动执行 source /etc/profile 才可以使Java的环境变量生效哦\033[0m"
-		echo -e "\033[31m然后再用 java -version 来查看一下Java的版本吧\033[0m"
-	else
-		echo -e "\033[31m如果失败，还需要再去 /etc/profile 里把刚刚写进去的内容给删除掉,然后再看看哪里报错吧\033[0m"
-		echo -e "\033[31m调试好之后就可以继续运行了\033[0m"
-	fi
 }
 
 # 安装jdk11
