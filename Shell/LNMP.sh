@@ -16,7 +16,8 @@ function install_nginx(){
 	[ ! $(grep nginx /etc/passwd) ] && useradd -M -s /sbin/nologin nginx
 	cd /usr/local/src/
 	# 下载pcre源码包
-	wget -c https://jaist.dl.sourceforge.net/project/pcre/pcre/8.42/pcre-8.42.tar.gz
+	# --no-check-certificate 以不安全的方式连接
+	wget -c --no-check-certificate https://jaist.dl.sourceforge.net/project/pcre/pcre/8.42/pcre-8.42.tar.gz
 	tar -zxvf pcre-8.42.tar.gz
 	# 下载nginx源码包
 	wget -c http://nginx.org/download/nginx-1.15.0.tar.gz
