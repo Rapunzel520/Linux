@@ -33,6 +33,7 @@ function install_nginx(){
 	# 输出版本
 	/usr/local/nginx/sbin/nginx	-v
 	[ $? -eq 0 ] && echo -e "\033[31mNginx安装成功\033[0m"
+	netstat -tlnp | grep -w 80
 	sleep 10
 }
 
@@ -147,6 +148,7 @@ EOF
 	# 修改密码
 	mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '123';"
 	[ $? -eq 0 ] && echo -e "\033[31mMySQL安装成功\033[0m" && echo -e "\033[31mMySQL的初始密码为：123\033[0m"
+	netstat -tlnp | grep -w 3306
 	sleep 10
 
 	# 授权远程登录
@@ -207,12 +209,13 @@ EOF
 	cp /usr/local/src/php-7.3.8/php.ini-production /usr/local/php/etc/php.ini
 	# 启动
 	cp /usr/local/src/php-7.3.8/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
-	chmod +x /etc/init.d/php-fpm 
+	chmod +x /etc/init.d/php-fpm
 	chkconfig --add php-fpm
 	chkconfig php-fpm on
 	[ ! $(grep nginx /etc/passwd) ] && useradd -M -s /sbin/nologin nginx
 	service php-fpm start
 	[ $? -eq 0 ] && echo -e "\033[31mPHP安装成功\033[0m"
+	netstat -tlnp | grep -w 9000
 	sleep 10
 
 	# 报错：configure: error: Cannot find ldap libraries in /usr/lib.
