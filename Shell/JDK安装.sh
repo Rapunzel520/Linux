@@ -5,7 +5,7 @@
 # 包要自己下载到本地再传到服务器上面，下载jdk的源码包花费的时间太久了
 
 # 安装jdk1.8
-function jdk1.8_install(){
+function jdk1_8_install(){
 	# 源码包存放目录
 	SOFTWARE_DIR="/opt/software/"
 	# 安装目录
@@ -25,18 +25,8 @@ function jdk1.8_install(){
 	# UNZIP_PACKAGE_NAME=$(ls ${INSTALL_DIR} | egrep "jdk*")
 	UNZIP_PACKAGE_NAME="jdk1.8.0_191"
 	#添加jdk环境变量
-# 这个EOF好像一定要顶格的。不顶格写进去前面会有空白。（放在函数里整体格式就难看多了）
-# 分两段来写入/etc/profile，第一段应该是声明变量，然后第二段可以用$来引用变量。
-# 第一段需要实际的值，然后第二段需要开启转义。
-cat >> /etc/profile << EOF
-#jdk1.8
-export JAVA_HOME=${INSTALL_DIR}${UNZIP_PACKAGE_NAME}
-export JRE_HOME=${INSTALL_DIR}${UNZIP_PACKAGE_NAME}/jre
-EOF
-cat >> /etc/profile << \EOF
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH
-export PATH=$JAVA_HOME/bin:$PATH
-EOF
+	echo -e "# jdk1.8\nexport JAVA_HOME=${INSTALL_DIR}${UNZIP_PACKAGE_NAME}\nexport JRE_HOME=${INSTALL_DIR}${UNZIP_PACKAGE_NAME}/jre\n" >> /etc/profile
+	echo -e "export CLASSPATH=.:\${JAVA_HOME}/lib/dt.jar:\${JAVA_HOME}/lib/tools.jar:$JRE_HOME/lib:\${CLASSPATH}\nexport PATH=\${JAVA_HOME}/bin:\${PATH}" >> /etc/profile
 
 	# 使环境变量生效（理论流程是这样，但是脚本执行这个命令不生效，脚本结束之后还需要再手动执行一遍。）
 	# 好像是source /etc/profile只在当前会话生效，而且shell和打开的当前会话不是同一个会话，重新source /etc/profile后就可以生效了。
@@ -54,23 +44,30 @@ function jdk11_install(){
 	# 解压
 	tar -zxvf jdk-11.0.4_linux-x64_bin.tar.gz -C /opt/
 	# 添加jdk环境变量
-cat >> /etc/profile << \EOF
-# jdk-11.0.4
-export JAVA_HOME=/opt/jdk-11.0.4
-export PATH=${PATH}:${JAVA_HOME}/bin
-EOF
+	echo -e "# jdk-11.0.4\nexport JAVA_HOME=/opt/jdk-11.0.4\nexport PATH=\${PATH}:\${JAVA_HOME}/bin" >> /etc/profile
 	# 使配置文件生效
 	source /etc/profile
 	# 查看Java版本
 	java --version
 }
 
-
 function main(){
-	# jdk1.8_install
-	jdk11_install
+	if [[ ! -z $1 ]]; then
+		if [[ $1 == "jdk1.8" ]]; then
+			jdk1_8_install
+		elif [[ $1 == "jdk11" ]]; then
+			jdk11_install
+		else
+			echo "传入参数错误"
+			exit
+		fi
+	else
+		echo "请用 sh $0 jdk1.8|jdk11 来执行脚本"
+		exit
+	fi
+	
 }
 
-main
+main $1
 
 # 脚本运行不一定能成功，不喜勿喷！
