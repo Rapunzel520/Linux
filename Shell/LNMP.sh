@@ -48,8 +48,9 @@ function install_mysql57(){
 	cd /usr/local/src
 	# 好像有个bug，如果文件遇到特许情况没有下载完成，文件名还是存在的，所以它不会继续下载
 	# wget -c 应该可以解决（-c 断点续传）
-	# wget -c https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
 	[ ! -f mysql-boost-5.7.25.tar.gz ] && axel -n 20 https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
+	# 验证源码包的完整性
+	wget -c https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-boost-5.7.25.tar.gz
 	# 添加用户
 	[ ! $(grep mysql /etc/passwd) ] && useradd -s /sbin/nologin mysql
 	# 建立所需目录并更改所有者为mysql
