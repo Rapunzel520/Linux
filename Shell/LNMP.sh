@@ -67,66 +67,95 @@ function install_mysql57(){
 # 配置文件
 cat > /etc/my.cnf << \EOF
 [client]
-port        = 3306
-socket      = /tmp/mysql.sock
+port = 3306
+socket = /tmp/mysql.sock
 
 [mysqld]
-port        = 3306
-socket      = /tmp/mysql.sock
+port = 3306
+socket = /tmp/mysql.sock
 user = mysql
 
 basedir = /usr/local/mysql
 datadir = /data/mysql/data
 pid-file = /data/mysql/mysql.pid
-
+# 错误日志路径
 log_error = /data/mysql/mysql-error.log
 slow_query_log = 1
+# 慢查询时间 超过1秒则为慢查询
 long_query_time = 1
 slow_query_log_file = /data/mysql/mysql-slow.log
-
+# MySQL选项以避免外部锁定。该选项默认开启
 skip-external-locking
+# 指定用于索引的缓冲区大小
 key_buffer_size = 32M
+# 接受的数据包大小
 max_allowed_packet = 1024M
+# 指定表高速缓存的大小
 table_open_cache = 128
+# MySQL执行排序使用的缓冲大小
 sort_buffer_size = 768K
+# 对导入导出数据进行分段，在大数据导入导出的时候可以很大的提升导入导出性能
 net_buffer_length = 8K
+# MySQL读入缓冲区大小
 read_buffer_size = 768K
+# MySQL的随机读缓冲区大小
 read_rnd_buffer_size = 512K
+# MyISAM设置恢复表之时使用的缓冲区的尺寸
 myisam_sort_buffer_size = 8M
+# 表示可以重新利用保存在缓存中线程的数量
 thread_cache_size = 16
+# MySQL的查询缓冲大小
 query_cache_size = 16M
+# MySQL的heap（堆积）表缓冲大小
 tmp_table_size = 32M
+# 降低内存占用
 performance_schema_max_table_instances = 1000
-
+# timestamp列的数据也会被自动更新到更新操作所发生的那个时间点
 explicit_defaults_for_timestamp = true
+# MySQL的最大连接数
 max_connections = 500
+# 最大中断错误连接
 max_connect_errors = 100
+# MySQL打开的文件描述符限制
 open_files_limit = 65535
-
-log_bin=mysql-bin
-binlog_format=mixed
-server_id   = 232
-expire_logs_days = 10
+# 开启binlog
+log_bin = mysql-bin
+# binlog日志格式
+binlog_format = mixed
+server_id = 232
+# 超过30天的binlog删除
+expire_logs_days = 30
 early-plugin-load = ""
-
+# 默认存储引擎
 default_storage_engine = InnoDB
+# InnoDB为独立表空间模式，每个数据库的每个表都会生成一个数据空间
 innodb_file_per_table = 1
+# InnoDB使用一个缓冲池来保存索引和原始数据
 innodb_buffer_pool_size = 128M
+# 确定数据日志文件的大小
 innodb_log_file_size = 32M
+# 确定一些日志文件所用的内存大小
 innodb_log_buffer_size = 8M
+# 每次提交事务的时候，都会将log buffer刷写到日志
 innodb_flush_log_at_trx_commit = 1
+# InnoDB事务在被回滚之前可以等待一个锁定的超时秒数
 innodb_lock_wait_timeout = 50
 
 [mysqldump]
 quick
+# 服务器发送和接受的最大包长度
 max_allowed_packet = 16M
 
 [mysql]
 no-auto-rehash
 
+# 使用myisamchk实用程序来获得有关数据库表的信息或检查、修复、优化他们
 [myisamchk]
+# 指定索引缓冲区的大小，它决定索引处理的速度，尤其是索引读的速度
 key_buffer_size = 32M
+# 在每个connection第一次需要使用这个buffer的时候，一次性分配设置的内存
 sort_buffer_size = 768K
+# 是MySQL读入缓冲区大小
 read_buffer = 2M
 write_buffer = 2M
 
