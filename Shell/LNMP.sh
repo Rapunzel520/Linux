@@ -24,7 +24,12 @@ function install_nginx(){
 	tar -zxvf nginx-1.15.0.tar.gz
 	cd /usr/local/src/nginx-1.15.0/
 	# 编译安装
-	./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.42 --with-http_ssl_module --user=nginx --group=nginx
+	./configure --prefix=/usr/local/nginx \
+				--with-pcre=/usr/local/src/pcre-8.42 \
+				--with-http_ssl_module \
+				--with-http_stub_status_module \
+				--user=nginx \
+				--group=nginx
 
 	make && make install
 
